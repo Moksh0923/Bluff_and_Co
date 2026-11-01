@@ -62,3 +62,61 @@
 .scores div { padding: 0.6rem 0.25rem; border: 1px solid var(--line); border-radius: var(--radius-sm); }
 .scores dt { font-size: 0.75rem; color: var(--muted); }
 .scores dd { margin: 0.15rem 0 0; font: 600 1.375rem/1 var(--serif); font-variant-numeric: tabular-nums; }
+
+
+/* GLASSFOLD TIC TAC TOE — luminous arcade board */
+body.tictactoe-page .app{max-width:760px}
+body.tictactoe-page .topbar{margin-bottom:1.2rem}
+body.tictactoe-page .panel{max-width:650px;margin-inline:auto;padding:clamp(1.4rem,4vw,2.6rem)}
+body.tictactoe-page #lobby{margin-top:clamp(1rem,7vh,4rem);text-align:center}
+body.tictactoe-page #lobby h2{font-size:clamp(2rem,5vw,3rem);margin-bottom:.55rem}
+body.tictactoe-page #lobby .lede{max-width:28rem;margin:0 auto 1.6rem}
+body.tictactoe-page .choice{grid-template-columns:repeat(2,minmax(0,1fr));max-width:26rem;margin:1.5rem auto .5rem}
+body.tictactoe-page #hostView,body.tictactoe-page #joinView{margin-top:clamp(1rem,7vh,4rem)}
+body.tictactoe-page .party-code{color:#a7eaff;background:linear-gradient(145deg,rgba(76,133,211,.13),rgba(122,102,224,.12));border:1px solid rgba(150,211,255,.35);border-radius:16px;text-shadow:0 0 25px rgba(111,208,255,.35);box-shadow:inset 0 1px rgba(255,255,255,.08),0 15px 40px rgba(0,0,0,.16)}
+body.tictactoe-page #gameView{text-align:center}
+body.tictactoe-page #roleLine{display:inline-flex;padding:.4rem .8rem;border-radius:99px;color:#b7eaff;background:rgba(92,163,228,.12);border:1px solid rgba(131,217,255,.22)}
+body.tictactoe-page #statusLine{margin:.8rem 0 1.4rem;font-size:clamp(1.65rem,4vw,2.35rem)}
+body.tictactoe-page .ttt-board{max-width:min(100%,390px);gap:clamp(.45rem,1.6vw,.75rem);padding:clamp(.65rem,2vw,1rem);border:1px solid rgba(145,193,255,.25);border-radius:24px;background:linear-gradient(145deg,rgba(75,111,195,.12),rgba(9,17,45,.55));box-shadow:inset 0 1px rgba(255,255,255,.07),0 22px 55px rgba(0,0,0,.22)}
+body.tictactoe-page .cell{position:relative;overflow:hidden;aspect-ratio:1;border-radius:17px;color:#eaf8ff;background:linear-gradient(145deg,rgba(31,48,91,.9),rgba(10,19,48,.95));border:1px solid rgba(147,185,255,.22);box-shadow:inset 0 1px rgba(255,255,255,.08),0 8px 18px rgba(0,0,0,.16);font:800 clamp(2.8rem,12vw,4.3rem)/1 system-ui,sans-serif;transition:transform .18s ease,border-color .18s ease,background .18s ease,box-shadow .18s ease}
+body.tictactoe-page .cell:not(:disabled):hover{transform:translateY(-3px);border-color:rgba(131,217,255,.8);background:linear-gradient(145deg,rgba(42,73,133,.95),rgba(18,34,78,.98));box-shadow:0 10px 24px rgba(63,145,255,.16),inset 0 1px rgba(255,255,255,.12)}
+body.tictactoe-page .cell[data-mark="X"]{color:#8ce8ff;text-shadow:0 0 25px rgba(104,221,255,.55)}
+body.tictactoe-page .cell[data-mark="O"]{color:#c1aaff;text-shadow:0 0 25px rgba(173,140,255,.55)}
+body.tictactoe-page .cell.win{background:linear-gradient(145deg,rgba(73,163,184,.42),rgba(86,84,169,.38));border-color:#a6edff;box-shadow:0 0 0 1px rgba(166,237,255,.25),0 0 30px rgba(95,208,255,.2);animation:ttt-win-pulse 1.4s ease-in-out infinite alternate}
+@keyframes ttt-win-pulse{from{filter:brightness(1)}to{filter:brightness(1.28)}}
+body.tictactoe-page .scores{gap:.65rem;max-width:430px;margin:1.4rem auto 0}
+body.tictactoe-page .scores div{padding:.85rem .4rem;border:1px solid rgba(155,190,255,.19);border-radius:15px;background:rgba(255,255,255,.045)}
+body.tictactoe-page .scores dt{color:#aabce0}
+body.tictactoe-page .scores dd{color:#f0f5ff;font-size:1.65rem}
+body.tictactoe-page #gameView .actions{justify-content:center;margin-top:1.4rem}
+@media(max-width:480px){body.tictactoe-page .choice{grid-template-columns:1fr}body.tictactoe-page .scores{gap:.35rem}body.tictactoe-page .scores div{padding:.65rem .2rem}body.tictactoe-page .scores dt{font-size:.68rem}}
+
+
+/* GlassFold controls and surfaces — remove all remaining violet accents. */
+body.tictactoe-page .btn{
+    min-height:3.05rem;padding:0 1.25rem;border-radius:14px;font-weight:750;
+    letter-spacing:.01em;transition:transform .18s ease,box-shadow .18s ease,background .18s ease,border-color .18s ease;
+}
+body.tictactoe-page .btn-primary{
+    color:#071426;background:linear-gradient(115deg,#b7f0ff,#8dc8ff 55%,#b6c7ff);
+    border:1px solid rgba(231,249,255,.8);box-shadow:0 10px 28px rgba(83,169,255,.22),inset 0 1px rgba(255,255,255,.75);
+}
+body.tictactoe-page .btn-primary:hover{background:linear-gradient(115deg,#d5f8ff,#a9d8ff 55%,#cbd6ff);box-shadow:0 15px 35px rgba(83,169,255,.3);transform:translateY(-2px)}
+body.tictactoe-page .btn-ghost{color:#e5f3ff;background:rgba(13,26,55,.65);border:1px solid rgba(160,207,255,.28);box-shadow:inset 0 1px rgba(255,255,255,.05)}
+body.tictactoe-page .btn-ghost:hover{background:rgba(79,151,217,.18);border-color:#9be8ff;transform:translateY(-2px)}
+body.tictactoe-page .field input,body.tictactoe-page input{
+    min-height:3.2rem;padding:.8rem 1rem;color:#f4f8ff!important;-webkit-text-fill-color:#f4f8ff;
+    background:rgba(3,10,29,.78)!important;border:1px solid rgba(153,205,255,.32)!important;
+    border-radius:14px!important;box-shadow:inset 0 1px rgba(255,255,255,.04);
+}
+body.tictactoe-page input:focus-visible{outline:none;border-color:#9be8ff!important;box-shadow:0 0 0 4px rgba(113,199,255,.13)}
+body.tictactoe-page .panel{background:linear-gradient(145deg,rgba(16,29,63,.82),rgba(6,13,35,.86));border-color:rgba(157,204,255,.24)}
+body.tictactoe-page .party-code{color:#a9edff;background:linear-gradient(135deg,rgba(80,169,226,.2),rgba(93,128,205,.12));border-color:rgba(151,218,255,.42);text-shadow:0 0 25px rgba(111,208,255,.3)}
+body.tictactoe-page #roleLine{color:#a9edff;background:rgba(92,163,228,.12);border-color:rgba(131,217,255,.25)}
+body.tictactoe-page .cell[data-mark="O"]{color:#c4e4ff;text-shadow:0 0 25px rgba(147,202,255,.48)}
+body.tictactoe-page .scores div{border-color:rgba(155,201,255,.2);background:rgba(255,255,255,.05);box-shadow:inset 0 1px rgba(255,255,255,.04)}
+body.tictactoe-page .scores dt{color:#a9bfdf}
+body.tictactoe-page .scores dd{color:#eaf7ff}
+body.tictactoe-page .error{color:#ffaaa9}
+body.tictactoe-page .actions{gap:.7rem}
+@media(max-width:480px){body.tictactoe-page .actions .btn{flex:1 1 0;min-width:0;padding-inline:.65rem}}

@@ -1,0 +1,105 @@
+/* Bluff waiting lobby (#roomView). Loaded after bluff-entry.css, which defines the --v-* tokens,
+   the .en-btn buttons and the ent-drift keyframes. Rules are scoped to .lob / #roomView so the
+   entry page and the game table are untouched. */
+
+/* The lobby sits outside .app now; .app only holds the fixed full-screen game view. */
+body.bluff-page .app { max-width: none; padding: 0; }
+
+.lob { position: relative; overflow: hidden; color: var(--v-text); }
+.lob::before, .lob::after { content: ""; position: absolute; border-radius: 50%; filter: blur(90px); pointer-events: none; animation: ent-drift 14s ease-in-out infinite alternate; }
+.lob::before { width: 26rem; height: 26rem; left: -9rem; top: -6rem; background: #6d28d9; opacity: 0.5; }
+.lob::after { width: 22rem; height: 22rem; right: -7rem; top: 10rem; background: #a21caf; opacity: 0.3; animation-delay: -6s; }
+
+#roomView { position: relative; z-index: 1; width: min(100% - 2.5rem, 56rem); margin: 0 auto; padding: clamp(2rem, 6vw, 3.5rem) 0 clamp(2.5rem, 6vw, 4rem); }
+
+/* ---------- header ---------- */
+.lob-head { text-align: center; }
+.lob-pill { display: inline-flex; align-items: center; gap: 0.55rem; padding: 0.4rem 0.95rem; font-size: 0.8125rem; font-weight: 600; color: var(--v-violet-2); background: rgba(139, 92, 246, 0.12); border: 1px solid var(--v-line); border-radius: 99px; }
+.lob-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--v-violet-2); animation: lob-ping 1.8s infinite; }
+@keyframes lob-ping { 0% { box-shadow: 0 0 0 0 rgba(167, 139, 250, 0.6); } 100% { box-shadow: 0 0 0 9px rgba(167, 139, 250, 0); } }
+#roomView[data-ready="1"] .lob-dot { background: #6fd39a; animation-name: lob-ping-ok; }
+#roomView[data-ready="1"] .lob-pill { color: #8fe3b4; }
+@keyframes lob-ping-ok { 0% { box-shadow: 0 0 0 0 rgba(111, 211, 154, 0.6); } 100% { box-shadow: 0 0 0 9px rgba(111, 211, 154, 0); } }
+
+#roomView h2 { margin: 1rem 0 0.6rem; font: 700 clamp(2rem, 6vw, 3rem)/1.1 var(--serif); letter-spacing: -0.015em; color: var(--v-text); }
+.lob-hint { max-width: 30rem; margin: 0 auto; font-size: 1.0625rem; line-height: 1.6; color: var(--v-muted); }
+
+/* ---------- layout ---------- */
+.lob-grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 1.1rem; margin-top: 2rem; align-items: start; }
+.lob-card { padding: 1.5rem; background: var(--v-card); border: 1px solid var(--v-line); border-radius: 18px; }
+.lob-label { margin: 0 0 0.2rem; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--v-violet-2); }
+
+/* ---------- invitation ---------- */
+#roomView .party-code {
+    margin: 0.6rem 0 1rem; padding: 1.1rem 0.5rem 1.1rem calc(0.5rem + 0.25em);
+    font: 700 clamp(2.3rem, 10vw, 3.3rem)/1 var(--serif); letter-spacing: 0.25em; text-align: center;
+    color: #fff; text-shadow: 0 0 28px rgba(167, 139, 250, 0.7);
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.28), rgba(192, 38, 211, 0.16));
+    border: 1px solid rgba(167, 139, 250, 0.4); border-radius: 14px; user-select: all;
+}
+.lob-invite-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+.lob-invite-btns .en-btn { min-height: 2.8rem; padding: 0 0.6rem; font-size: 0.9375rem; }
+.lob-invite-btns #shareBtn { grid-column: 1 / -1; }
+.lob-help { margin: 1rem 0 0; font-size: 0.875rem; line-height: 1.55; color: var(--v-muted); }
+
+/* ---------- players ---------- */
+.lob-players-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+.lob-players-head h3 { margin: 0; font: 600 1.3rem/1.2 var(--serif); color: var(--v-text); }
+.lob-count { margin-left: 0.4rem; font: 700 0.9375rem/1 var(--sans); color: var(--v-gold); font-variant-numeric: tabular-nums; }
+.lob-limit { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #7f77a0; }
+.lob-meter { height: 5px; margin: 0.85rem 0 1rem; background: rgba(255, 255, 255, 0.07); border-radius: 99px; overflow: hidden; }
+.lob-meter > span { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #7c3aed, #d946ef); border-radius: 99px; transition: width 0.4s ease; }
+
+#roomView .roster { display: grid; grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr)); gap: 0.6rem; margin: 0; padding: 0; border: 0; list-style: none; }
+#roomView .roster-row {
+    display: flex; align-items: center; justify-content: flex-start; gap: 0.7rem; min-width: 0;
+    padding: 0.65rem 0.8rem; background: rgba(255, 255, 255, 0.04); border: 1px solid var(--v-line); border-radius: 14px;
+    animation: lob-in 0.3s ease-out;
+}
+@keyframes lob-in { from { opacity: 0; transform: translateY(6px) scale(0.98); } to { opacity: 1; transform: none; } }
+#roomView .roster-row.is-me { border-color: rgba(167, 139, 250, 0.55); background: rgba(139, 92, 246, 0.12); }
+#roomView .roster-row.is-host { border-color: rgba(247, 231, 166, 0.4); }
+#roomView .roster-name { flex: 1 1 auto; min-width: 0; overflow: hidden; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; color: var(--v-text); }
+
+.lob-av { display: grid; place-items: center; flex: none; width: 2.4rem; height: 2.4rem; font: 700 1rem/1 var(--sans); color: #fff; border-radius: 50%; background: hsl(var(--h, 268) 38% 38%); border: 3px solid rgba(255, 255, 255, 0.18); }
+.is-host .lob-av { border-color: rgba(247, 231, 166, 0.6); }
+
+.lob-tags { display: flex; flex: none; gap: 0.3rem; }
+.lob-tag { padding: 0.2rem 0.5rem; font: 700 0.625rem/1 var(--sans); letter-spacing: 0.1em; text-transform: uppercase; border-radius: 99px; white-space: nowrap; }
+.lob-tag.is-host { color: #3a2f08; background: var(--v-gold); }
+.lob-tag.is-you { color: #e5dcff; background: rgba(139, 92, 246, 0.35); }
+
+.lob-slot { display: flex; align-items: center; gap: 0.7rem; padding: 0.65rem 0.8rem; min-height: 3.9rem; font-size: 0.875rem; color: #7f77a0; border: 1px dashed rgba(167, 139, 250, 0.3); border-radius: 14px; }
+.lob-slot .lob-av { background: transparent; border: 2px dashed rgba(167, 139, 250, 0.3); color: transparent; }
+
+/* ---------- waiting message ---------- */
+.lob-wait { display: flex; align-items: center; gap: 0.75rem; margin-top: 1rem; padding: 0.8rem 1rem; background: rgba(139, 92, 246, 0.1); border: 1px solid var(--v-line); border-radius: 12px; }
+.lob-wait p { margin: 0; font-size: 0.9375rem; color: var(--v-text); }
+.lob-dots { display: inline-flex; gap: 4px; flex: none; }
+.lob-dots i { width: 7px; height: 7px; border-radius: 50%; background: var(--v-violet-2); animation: lob-bounce 1.2s ease-in-out infinite; }
+.lob-dots i:nth-child(2) { animation-delay: 0.15s; }
+.lob-dots i:nth-child(3) { animation-delay: 0.3s; }
+@keyframes lob-bounce { 0%, 60%, 100% { transform: none; opacity: 0.45; } 30% { transform: translateY(-5px); opacity: 1; } }
+.lob-slot .lob-dots { margin-left: 0.15rem; }
+#roomView[data-ready="1"] .lob-wait { background: rgba(111, 211, 154, 0.1); border-color: rgba(111, 211, 154, 0.35); }
+#roomView[data-ready="1"] .lob-wait .lob-dots { display: none; }
+
+/* ---------- controls ---------- */
+.lob-actions { display: flex; gap: 0.75rem; margin-top: 1.25rem; }
+.lob-actions .en-btn-ghost { flex: 1 1 0; }
+.lob-actions #startBtn { flex: 2 1 0; }
+#startBtn:disabled { opacity: 0.45; cursor: not-allowed; box-shadow: none; }
+#startBtn:disabled:hover { transform: none; }
+
+/* ---------- small screens ---------- */
+@media (max-width: 760px) {
+    .lob-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 420px) {
+    .lob-card { padding: 1.2rem; }
+    #roomView .roster { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .lob::before, .lob::after, .lob-dot, .lob-dots i, #roomView .roster-row { animation: none !important; }
+    .lob-meter > span { transition: none; }
+}
