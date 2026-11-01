@@ -583,3 +583,74 @@ a.wordmark:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 4px;
 }
+
+
+/* GLASSFOLD GAME UI — Minimaliser and Tic Tac Toe only */
+.glassfold-backdrop{position:fixed;inset:0;z-index:-2;width:100%;height:100%;opacity:.82;pointer-events:none}
+body.minimaliser-page,body.tictactoe-page{min-height:100vh;color:#f3f4ff;background:#050817;isolation:isolate}
+body.minimaliser-page::before,body.tictactoe-page::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 50% 5%,rgba(38,75,166,.16),transparent 54%),linear-gradient(180deg,rgba(4,7,20,.22),rgba(4,7,20,.78))}
+body.minimaliser-page .app,body.tictactoe-page .app{position:relative;z-index:1;width:min(100% - 2rem,920px);padding-top:clamp(1rem,3vw,2rem);padding-bottom:3rem}
+body.minimaliser-page .topbar,body.tictactoe-page .topbar{border:1px solid rgba(173,197,255,.15);border-radius:16px;padding:.8rem 1rem;margin-bottom:1.5rem;background:rgba(8,13,34,.55);box-shadow:0 12px 35px rgba(0,0,0,.18),inset 0 1px rgba(255,255,255,.06);backdrop-filter:blur(18px)}
+body.minimaliser-page .wordmark,body.tictactoe-page .wordmark{color:#dce8ff}
+body.minimaliser-page .topbar-note,body.tictactoe-page .topbar-note{color:#aabce6;letter-spacing:.13em;font-size:.72rem;font-weight:700}
+body.minimaliser-page .panel,body.tictactoe-page .panel{position:relative;overflow:hidden;color:#f3f4ff;background:linear-gradient(145deg,rgba(15,24,57,.76),rgba(7,12,32,.78));border:1px solid rgba(157,190,255,.22);border-radius:24px;box-shadow:0 28px 80px rgba(0,0,0,.36),inset 0 1px rgba(255,255,255,.09);backdrop-filter:blur(22px)}
+body.minimaliser-page .panel:before,body.tictactoe-page .panel:before{content:"";position:absolute;inset:0 0 auto;height:1px;background:linear-gradient(90deg,transparent,rgba(174,218,255,.72),transparent);pointer-events:none}
+body.minimaliser-page .eyebrow,body.tictactoe-page .eyebrow{color:#83d9ff;letter-spacing:.19em;font-size:.7rem;font-weight:800}
+body.minimaliser-page h1,body.minimaliser-page h2,body.tictactoe-page h1,body.tictactoe-page h2{color:#f5f7ff;letter-spacing:-.035em}
+body.minimaliser-page .lede,body.tictactoe-page .lede{color:#b9c8e8}
+body.minimaliser-page .field label,body.tictactoe-page .field label{color:#e4ebff}
+body.minimaliser-page input,body.tictactoe-page input{color:#f5f7ff;background:rgba(3,8,25,.62);border:1px solid rgba(150,185,255,.25);border-radius:12px}
+body.minimaliser-page input:focus-visible,body.tictactoe-page input:focus-visible{outline-color:#83d9ff;border-color:#83d9ff;box-shadow:0 0 0 4px rgba(131,217,255,.12)}
+body.minimaliser-page .hint,body.tictactoe-page .hint{color:#9eafd4}
+body.minimaliser-page .btn,body.tictactoe-page .btn{min-height:2.9rem;border-radius:12px;transition:transform .2s ease,box-shadow .2s ease,background .2s ease}
+body.minimaliser-page .btn:hover,body.tictactoe-page .btn:hover{transform:translateY(-2px)}
+body.minimaliser-page .btn-primary,body.tictactoe-page .btn-primary{color:#071326;background:linear-gradient(115deg,#a5e8ff,#8daeff 58%,#b8a6ff);border:1px solid rgba(221,243,255,.72);box-shadow:0 10px 28px rgba(80,142,255,.24),inset 0 1px rgba(255,255,255,.7)}
+body.minimaliser-page .btn-primary:hover,body.tictactoe-page .btn-primary:hover{background:linear-gradient(115deg,#c4f1ff,#a8bcff 58%,#c8baff)}
+body.minimaliser-page .btn-ghost,body.tictactoe-page .btn-ghost{color:#dce8ff;background:rgba(255,255,255,.045);border-color:rgba(166,196,255,.25)}
+body.minimaliser-page .progress{height:9px;border-radius:99px;background:rgba(255,255,255,.09);overflow:hidden}
+body.minimaliser-page .progress>span{border-radius:inherit;background:linear-gradient(90deg,#62d6ef,#8eaaff,#b6a0ff);box-shadow:0 0 18px rgba(105,192,255,.45)}
+body.minimaliser-page .score-list{gap:.65rem}
+body.minimaliser-page .score-row{padding:.7rem .8rem;border:1px solid rgba(160,190,255,.15);border-radius:14px;background:rgba(255,255,255,.045)}
+body.minimaliser-page .score-row label{color:#e6edff}
+body.minimaliser-page .score-row input{max-width:8rem;text-align:center}
+body.minimaliser-page .score-row:nth-child(4n+1){border-left:3px solid #78dfff}
+body.minimaliser-page .score-row:nth-child(4n+2){border-left:3px solid #a69cff}
+body.minimaliser-page .score-row:nth-child(4n+3){border-left:3px solid #80e4c7}
+body.minimaliser-page .score-row:nth-child(4n){border-left:3px solid #f2c67e}
+body.minimaliser-page .confetti{z-index:20}
+body.minimaliser-page .start{margin-top:clamp(2rem,12vh,7rem);padding:clamp(2rem,6vw,4rem);text-align:center}
+body.minimaliser-page .start h1{font-size:clamp(2.8rem,8vw,5rem);background:linear-gradient(100deg,#fff,#a8eaff 45%,#b8aaff);-webkit-background-clip:text;background-clip:text;color:transparent}
+body.minimaliser-page .start .lede{max-width:32rem;margin:.8rem auto 1.8rem}
+body.minimaliser-page .mini-topbar{display:flex}
+@media(max-width:600px){body.minimaliser-page .app,body.tictactoe-page .app{width:min(100% - 1rem,920px);padding-top:.5rem}body.minimaliser-page .panel,body.tictactoe-page .panel{border-radius:19px;padding:1.25rem}body.minimaliser-page .topbar,body.tictactoe-page .topbar{margin-bottom:.8rem}}
+
+
+/* GlassFold form refinements: clear number fields, consistent buttons and panels. */
+body.minimaliser-page .step,body.minimaliser-page #gameContainer{
+    width:100%;max-width:100%;min-width:0;
+}
+body.minimaliser-page .field{width:100%;min-width:0}
+body.minimaliser-page .field input[type=number]{
+    display:block;width:100%;max-width:100%;min-width:0;height:3.35rem;
+    padding:0 1rem!important;line-height:normal!important;text-align:left!important;
+    color:#f4f8ff!important;-webkit-text-fill-color:#f4f8ff;
+    background:rgba(3,10,29,.78)!important;
+    border:1px solid rgba(153,205,255,.34)!important;border-radius:14px!important;
+    font-size:1.12rem!important;font-weight:650;font-variant-numeric:tabular-nums;
+    opacity:1!important;visibility:visible!important;
+    appearance:textfield;-moz-appearance:textfield;
+}
+body.minimaliser-page .field input[type=number]::-webkit-inner-spin-button,
+body.minimaliser-page .field input[type=number]::-webkit-outer-spin-button{
+    -webkit-appearance:none;margin:0;
+}
+body.minimaliser-page .field input[type=number]:focus{
+    outline:none;border-color:#9be8ff!important;box-shadow:0 0 0 4px rgba(113,199,255,.13),0 0 24px rgba(94,179,255,.12);
+}
+body.minimaliser-page .field input[type=number]::placeholder{color:#7891b8;-webkit-text-fill-color:#7891b8;opacity:1}
+body.minimaliser-page .actions{background:linear-gradient(180deg,rgba(12,22,50,.97),rgba(8,15,36,.98));border-color:rgba(153,197,255,.16)}
+body.minimaliser-page .actions .btn{min-width:8rem}
+body.minimaliser-page .btn-ghost{background:rgba(116,172,232,.07);border:1px solid rgba(155,201,255,.28)}
+body.minimaliser-page .btn-ghost:hover{background:rgba(116,190,255,.15);border-color:#8edfff}
+body.minimaliser-page .btn-primary:focus-visible,body.minimaliser-page .btn-ghost:focus-visible{outline:2px solid #a7ecff;outline-offset:3px}
+body.minimaliser-page .score-row input{width:100%;min-width:0;text-align:center!important}

@@ -450,18 +450,14 @@ function cardEl(id, kind, extra) {
         const face = el("span", "c-face");
         face.append(
                 el("span", "c-face-suit", suitChar),
+                el("span", "c-face-emblem", suitChar),
                 el("span", "c-face-letter", RANKS[rank]),
                 el("span", "c-face-suit br", suitChar)
         );
         node.appendChild(face);
-    } else {                                            // A to 10: pips
+    } else {                                            // A to 10: one clear central suit symbol
         const field = el("span", "c-pips");
-        PIPS[rank].forEach(([x, y]) => {
-            const p = el("span", "pip" + (rank === 0 ? " ace" : "") + (y > 0.5 ? " down" : ""), suitChar);
-            p.style.left = `${x * 100}%`;
-            p.style.top = `${y * 100}%`;
-            field.appendChild(p);
-        });
+        field.appendChild(el("span", "pip single", suitChar));
         node.appendChild(field);
     }
 
@@ -561,6 +557,8 @@ function feedLine(e) {
     }
     if (e.t === "pass") return `${who(e.by)} passed`;
     if (e.t === "burn") return `${plural(e.count, "card")} burned`;
+    if (e.t === "call") return `${who(e.caller)} called Bluff on ${whoObj(e.accused)} · ${e.bluff ? "caught bluff" : "wrong call"}`;
+    if (e.t === "deal") return "Cards dealt — new game started";
     return "";
 }
 
@@ -573,6 +571,14 @@ function renderGame() {
     // What happened since we last drew? (Looked at before the DOM changes, because the
     // animations start from where things were.)
     const events = freshEvents(v);
+    if (soundEnabled) {
+        events.forEach((e) => {
+            if (e.t === "play") playUiSound("play");
+            else if (e.t === "call") playUiSound("call");
+            else if (e.t === "deal") playUiSound("deal");
+            else if (e.t === "pass") playUiSound("pass");
+        });
+    }
     const animate = events.length > 0 && !reduceMotion();
     const snap = animate ? snapshotFx(events) : null;
     if (animate) {
@@ -597,7 +603,9 @@ function renderGame() {
 
     const feed = $("feed");
     feed.innerHTML = "";
-    if (!over) v.log.forEach((e) => { const t = feedLine(e); if (t) feed.appendChild(el("li", "", t)); });
+    if (!over) (v.events || []).forEach((e) => { const t = feedLine(e); if (t) feed.appendChild(el("li", "", t)); });
+    $("activityToggle").setAttribute("aria-expanded", feed.hidden ? "false" : "true");
+    $("activityToggle").textContent = feed.hidden ? "Activity +" : "Activity −";
 
     const last = $("lastPlay");
     last.textContent = !over && v.roundOver && v.lastPlay && v.lastPlay.by !== v.you
@@ -618,7 +626,10 @@ function renderGame() {
         queueFx(events, snap, fresh, v);
     }
 
-    if (old && !over && v.phase === "playing" && v.turn === v.you && old.turn !== v.you) buzz();
+    if (old && !over && v.phase === "playing" && v.turn === v.you && old.turn !== v.you) {
+        buzz();
+        if (soundEnabled) playUiSound("turn");
+    }
     lastView = v;
 }
 
@@ -646,7 +657,7 @@ function buildSeat(p, pos, cap) {
     const row = el("div", "opp-row");
     row.append(av, count);
     const name = el("span", "opp-name", p.name);
-    const tag = el("span", "opp-tag", "Leads");
+    const tag = el("span", "opp-tag", "");
     const info = el("div", "opp-info");
     info.append(name, row, tag);
     if (pos === "top") root.append(fan, info); else root.append(info, fan);
@@ -690,7 +701,10 @@ function renderSeats(v, over) {
         s.root.setAttribute("aria-label", `${p.name}, ${p.out ? "left the game" : plural(p.count, "card")}`);
         if (turn) s.root.setAttribute("aria-current", "true"); else s.root.removeAttribute("aria-current");
         s.count.textContent = p.out ? "–" : p.count;
-        s.tag.hidden = !(!over && !p.out && p.pid === v.starter);
+        const isHost = p.pid === 0;
+        const leads = !over && !p.out && p.pid === v.starter;
+        s.tag.textContent = isHost && leads ? "HOST · LEADS" : isHost ? "HOST" : leads ? "LEADS" : "";
+        s.tag.hidden = p.out || (!isHost && !leads);
 
         const want = p.out ? 0 : Math.min(p.count, s.cap);
         while (s.fan.children.length < want) s.fan.appendChild(el("span", "card back"));
@@ -704,6 +718,7 @@ function renderMe(v, over) {
     $("meName").textContent = name;
     $("me").classList.toggle("turn", !over && v.turn === v.you);
     $("handLabel").textContent = plural(v.hand.length, "card");
+    $("meRole").hidden = role !== "host";
 }
 
 /* ---------- pile and claim ---------- */
@@ -774,6 +789,23 @@ function renderOver(v) {
     if (role !== "host") detail += (detail ? " " : "") + "Waiting for the host to start another game.";
     $("overDetail").textContent = detail;
     $("againBtn").hidden = role !== "host";
+
+    // Public end-of-game summary: only names and remaining card counts are shown.
+    const standings = $("finalHands");
+    standings.innerHTML = "";
+    const ordered = v.players.slice().sort((a, b) => {
+        if (a.pid === v.winner) return -1;
+        if (b.pid === v.winner) return 1;
+        return a.count - b.count;
+    });
+    ordered.forEach((p) => {
+        const row = el("div", "final-hand-row");
+        const identity = el("span", "final-hand-name", p.name + (p.pid === v.you ? " · You" : ""));
+        const count = el("strong", "final-hand-count", p.out ? "Left" : plural(p.count, "card"));
+        if (p.pid === v.winner) row.classList.add("is-winner");
+        row.append(identity, count);
+        standings.appendChild(row);
+    });
 
     if (!overShown) {
         overShown = true;
@@ -1296,6 +1328,36 @@ function confetti() {
    ===================================================================== */
 function setPlayError(message) { $("playError").textContent = message || ""; }
 
+/* Local-only synthesized UI sounds. Audio is created only after the player opts in. */
+let soundEnabled = false;
+let audioContext = null;
+function playUiSound(kind) {
+    if (!soundEnabled || !audioContext) return;
+    const presets = {
+        select: [520, 0.045, "sine"],
+        play: [390, 0.10, "triangle"],
+        call: [180, 0.22, "sawtooth"],
+        deal: [300, 0.13, "triangle"],
+        pass: [260, 0.07, "sine"],
+        turn: [660, 0.09, "sine"]
+    };
+    const [frequency, duration, wave] = presets[kind] || presets.select;
+    try {
+        const now = audioContext.currentTime;
+        const oscillator = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        oscillator.type = wave;
+        oscillator.frequency.setValueAtTime(frequency, now);
+        gain.gain.setValueAtTime(0.0001, now);
+        gain.gain.exponentialRampToValueAtTime(0.045, now + 0.012);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+        oscillator.connect(gain);
+        gain.connect(audioContext.destination);
+        oscillator.start(now);
+        oscillator.stop(now + duration + 0.02);
+    } catch (e) { /* Audio is optional; gameplay continues silently. */ }
+}
+
 function selectionCap() {
     return RULES.maxCards || Infinity;
 }
@@ -1311,6 +1373,7 @@ function toggleCard(id) {
             return;
         }
         selected.add(id);
+        if (soundEnabled) playUiSound("select");
         if (declRank === null && view && modeOf(view).declaring) declRank = cardRank(id);
     }
     if (view) { const m = modeOf(view); renderDeclare(m); renderHand(); renderActions(m); }
@@ -1330,6 +1393,37 @@ function act(type, payload) {
     if (conn && conn.open) conn.send(Object.assign({ type }, payload));
     return true;
 }
+
+$("activityToggle").addEventListener("click", () => {
+    const feed = $("feed");
+    feed.hidden = !feed.hidden;
+    $("activityToggle").setAttribute("aria-expanded", feed.hidden ? "false" : "true");
+    $("activityToggle").textContent = feed.hidden ? "Activity +" : "Activity −";
+});
+
+$("soundToggle").addEventListener("click", async () => {
+    if (!soundEnabled) {
+        try {
+            const AudioCtor = window.AudioContext || window.webkitAudioContext;
+            if (!AudioCtor) throw new Error("Audio unavailable");
+            audioContext = audioContext || new AudioCtor();
+            if (audioContext.state === "suspended") await audioContext.resume();
+            soundEnabled = true;
+            $("soundToggle").textContent = "Sound on";
+            $("soundToggle").setAttribute("aria-pressed", "true");
+            $("soundToggle").title = "Mute game sounds";
+            playUiSound("select");
+        } catch (e) {
+            soundEnabled = false;
+            $("soundToggle").textContent = "Sound unavailable";
+        }
+    } else {
+        soundEnabled = false;
+        $("soundToggle").textContent = "Sound off";
+        $("soundToggle").setAttribute("aria-pressed", "false");
+        $("soundToggle").title = "Turn sound on";
+    }
+});
 
 $("playBtn").addEventListener("click", () => {
     const cards = [...selected];
@@ -1357,6 +1451,12 @@ RANKS.forEach((label, i) => {
         if (view) { const m = modeOf(view); renderDeclare(m); renderActions(m); }
     });
     $("rankPick").appendChild(b);
+});
+
+$("returnHomeBtn").addEventListener("click", () => {
+    const home = $("homeLink").href;
+    teardown();
+    window.location.href = home;
 });
 
 $("againBtn").addEventListener("click", () => {

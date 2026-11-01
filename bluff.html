@@ -3,22 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#1b2528">
+    <meta name="theme-color" content="#050817">
     <title>Bluff · Online</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="bluff.css">
+    <link rel="stylesheet" href="bluff-entry.css">
+    <link rel="stylesheet" href="bluff-lobby.css">
 </head>
-<body>
-<div class="app">
-    <header class="topbar">
-        <a class="wordmark" href="index.html" id="homeLink">&larr; Home</a>
-        <span class="topbar-note">Bluff &middot; online</span>
-    </header>
+<body class="bluff-page">
+
+<!-- NAVIGATION (hidden automatically during a game) -->
+<header class="en-nav" id="enNav">
+    <div class="en-nav-in">
+        <a class="en-brand" href="index.html" aria-label="Bluff home">
+            <span class="en-brand-mark" aria-hidden="true"><i></i><i></i></span>
+            <span class="en-brand-name">Bluff</span>
+        </a>
+        <button type="button" class="en-toggle" id="enToggle" aria-expanded="false" aria-controls="enLinks" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+        <nav class="en-links" id="enLinks" aria-label="Main">
+            <a href="index.html" id="homeLink">Home</a>
+            <a href="minimaliser.html">Minimaliser</a>
+            <a href="tictactoe.html">Tic Tac Toe</a>
+        </nav>
+    </div>
+</header>
+
+<!-- ENTRY PAGE: name + create + join (lobby and joinView are the sections bluff.js switches between) -->
+<main class="ent">
 
     <!-- LOBBY -->
-    <section id="lobby" class="panel step">
-        <h2 tabindex="-1">Play Bluff</h2>
-        <p class="lede">Host a room and share the code, or enter a code you were given. 2&ndash;8 players.</p>
+    <section id="lobby" class="ent-sec step">
+        <div class="ent-head">
+            <p class="ent-pill"><span class="ent-dot" aria-hidden="true"></span> 2&ndash;8 players &middot; private rooms</p>
+            <h2 tabindex="-1">Ready to <span class="ent-grad">Bluff?</span></h2>
+            <p class="ent-lede">Grab your friends, pick a name, and take a seat. Host a private room or jump into one with a code.</p>
+        </div>
+
+        <div class="ent-name">
+            <label for="nameInput">Display name</label>
+            <div class="ent-name-row">
+                <span class="ent-av" id="entAv" aria-hidden="true">?</span>
+                <input type="text" id="nameInput" maxlength="14" autocomplete="nickname" placeholder="Enter your name"
+                       enterkeyhint="go" aria-describedby="nameHint lobbyError">
+            </div>
+            <p class="ent-hint" id="nameHint">This is how friends see you at the table. Up to 14 characters.</p>
+            <p class="error" id="lobbyError" role="alert"></p>
+        </div>
+
+        <div class="ent-cards">
+            <article class="ent-card" id="createCard">
+                <span class="ent-ico" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M8 12h8M12 8v8"/></svg>
+                </span>
+                <h3>Create a room</h3>
+                <p class="ent-desc">Host a private game. You&rsquo;ll get a 5-character code to share with up to 7 friends.</p>
+                <button type="button" class="en-btn en-btn-create" id="hostBtn">Create Room</button>
+            </article>
+
+            <article class="ent-card" id="joinCard">
+                <span class="ent-ico" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3A4 4 0 0 0 11 18.7l1-1"/></svg>
+                </span>
+                <h3>Join a room</h3>
+                <p class="ent-desc">Got a code from a friend? Enter it below to take a seat at their table.</p>
+                <div class="ent-codewrap">
+                    <label class="sr-only" for="lobbyCode">Room code</label>
+                    <input type="text" id="lobbyCode" class="code-input" maxlength="5" autocomplete="off"
+                           autocapitalize="characters" spellcheck="false" placeholder="ABC12"
+                           enterkeyhint="go" aria-describedby="lobbyCodeError">
+                    <p class="error" id="lobbyCodeError" role="alert"></p>
+                </div>
+                <button type="button" class="en-btn en-btn-join" id="joinBtn">Join Room</button>
+            </article>
+        </div>
 
         <details class="rules">
             <summary>How this version plays</summary>
@@ -30,24 +89,13 @@
                 <li>First to play out their hand wins, as long as their last play isn&rsquo;t caught.</li>
             </ul>
         </details>
-
-        <div class="field name-field">
-            <label for="nameInput">Your name</label>
-            <input type="text" id="nameInput" maxlength="14" autocomplete="nickname" placeholder="Enter name"
-                   aria-describedby="lobbyError">
-        </div>
-        <p class="error" id="lobbyError" role="alert"></p>
-
-        <div class="choice">
-            <button type="button" class="btn btn-primary" id="hostBtn">Host a room</button>
-            <button type="button" class="btn btn-ghost" id="joinBtn">Join a room</button>
-        </div>
     </section>
 
-    <!-- JOIN -->
-    <section id="joinView" class="panel step" hidden>
-        <form id="joinForm" novalidate>
+    <!-- JOIN (also where a failed join lands, with the error shown) -->
+    <section id="joinView" class="ent-sec ent-narrow step" hidden>
+        <form id="joinForm" class="ent-card ent-solo" novalidate>
             <h2 tabindex="-1">Join a room</h2>
+            <p class="ent-desc">Ask the host for their 5-character room code and enter it below.</p>
             <div class="field">
                 <label for="codeInput">Room code</label>
                 <input type="text" id="codeInput" class="code-input" maxlength="5" autocomplete="off"
@@ -55,32 +103,60 @@
                        aria-describedby="joinError">
                 <p class="error" id="joinError" role="alert"></p>
             </div>
-            <div class="actions">
-                <button type="button" class="btn btn-ghost" data-leave>Back</button>
-                <button type="submit" class="btn btn-primary" id="joinSubmit">Join</button>
+            <div class="ent-row">
+                <button type="button" class="en-btn en-btn-ghost" data-leave>Back</button>
+                <button type="submit" class="en-btn en-btn-join" id="joinSubmit">Join Room</button>
             </div>
         </form>
     </section>
+</main>
 
-    <!-- ROOM (waiting for players) -->
-    <section id="roomView" class="panel step" hidden>
-        <p class="eyebrow">Room</p>
-        <h2 tabindex="-1" id="roomHeading">Your room</h2>
-        <p class="hint" id="roomHint">Share this code. Friends enter it on their own device.</p>
-        <p class="party-code" id="partyCode" aria-live="polite">&hellip;</p>
+<!-- LOBBY (waiting room). bluff.js fills #partyCode, #rosterCount, #roster, #roomStatus and the buttons;
+     the lobby script only decorates them. -->
+<main class="lob">
+    <section id="roomView" class="step" hidden>
+        <div class="lob-head">
+            <p class="lob-pill"><span class="lob-dot" aria-hidden="true"></span><span id="lobState">Game lobby</span></p>
+            <h2 tabindex="-1" id="roomHeading">Your room</h2>
+            <p class="lob-hint" id="roomHint">Share this code. Friends enter it on their own device.</p>
+        </div>
 
-        <h3 class="section-label">Players <span id="rosterCount"></span></h3>
-        <ol class="roster" id="roster"></ol>
-        <p class="hint" id="roomStatus" role="status"></p>
+        <div class="lob-grid">
+            <article class="lob-card lob-invite">
+                <p class="lob-label">Room code</p>
+                <p class="party-code" id="partyCode" aria-live="polite">&hellip;</p>
+                <div class="lob-invite-btns">
+                    <button type="button" class="en-btn en-btn-ghost" id="copyBtn" disabled>Copy code</button>
+                    <button type="button" class="en-btn en-btn-ghost" id="linkBtn" disabled>Copy invite link</button>
+                    <button type="button" class="en-btn en-btn-ghost" id="shareBtn" hidden>Share invitation</button>
+                </div>
+                <p class="lob-help">Friends open the site, choose Join Room and enter this code, or simply open your invite link. Up to 8 players can join.</p>
+            </article>
 
-        <div class="actions">
-            <button type="button" class="btn btn-ghost" data-leave>Leave</button>
-            <button type="button" class="btn btn-ghost" id="copyBtn" disabled>Copy code</button>
-            <button type="button" class="btn btn-primary" id="startBtn" hidden>Start game</button>
+            <article class="lob-card lob-players">
+                <div class="lob-players-head">
+                    <h3>Players <span class="lob-count" id="rosterCount"></span></h3>
+                    <span class="lob-limit">2&ndash;8 players</span>
+                </div>
+                <div class="lob-meter" aria-hidden="true"><span id="lobMeter"></span></div>
+                <ol class="roster" id="roster"></ol>
+                <div class="lob-wait" id="lobWait">
+                    <span class="lob-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                    <p id="roomStatus" role="status"></p>
+                </div>
+            </article>
+        </div>
+
+        <div class="lob-actions">
+            <button type="button" class="en-btn en-btn-ghost" data-leave>Leave Room</button>
+            <button type="button" class="en-btn en-btn-create" id="startBtn" hidden>Start Game</button>
         </div>
     </section>
+</main>
 
-    <!-- GAME: a full-screen card table -->
+<div class="app">
+
+    <!-- GAME: a full-screen card table (unchanged) -->
     <section id="gameView" class="gv step" hidden>
         <div class="tv" id="tv">
 
@@ -89,6 +165,10 @@
                     <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </button>
                 <p class="room-chip" id="roomLine"></p>
+                <div class="tv-tools" aria-label="Game display settings">
+                    <button type="button" class="tool-btn" id="activityToggle" aria-expanded="true" aria-controls="feed" title="Show or hide activity">Activity</button>
+                    <button type="button" class="tool-btn" id="soundToggle" aria-pressed="false" title="Turn sound on">Sound off</button>
+                </div>
             </header>
 
             <!-- opponents along the top edge -->
@@ -128,7 +208,7 @@
 
             <div class="tv-bottom">
                 <h2 class="status" tabindex="-1" id="statusLine" role="status" aria-live="polite"></h2>
-                <ul class="feed sr-only" id="feed" aria-label="Recent moves"></ul>
+                <ul class="feed" id="feed" aria-label="Recent moves" aria-live="polite"></ul>
 
                 <div id="declare" class="declare" hidden>
                     <h3 class="declare-label" id="rankLabel">Declare a rank</h3>
@@ -151,6 +231,7 @@
                             <span class="avatar" id="meAvatar" aria-hidden="true"></span>
                             <span class="me-name" id="meName"></span>
                             <span class="me-count" id="handLabel"></span>
+                            <span class="me-role" id="meRole" hidden>HOST</span>
                         </div>
                         <button type="button" class="btn btn-ghost" id="passBtn">Pass</button>
                     </div>
@@ -177,8 +258,10 @@
                 <p class="over-label" id="overLabel">Winner</p>
                 <p class="over-title" id="overTitle"></p>
                 <p class="over-detail" id="overDetail"></p>
+                <div class="final-hands" id="finalHands" aria-label="Final player card counts"></div>
                 <div class="over-actions">
-                    <button type="button" class="btn btn-ghost" data-leave>Leave</button>
+                    <button type="button" class="btn btn-ghost" data-leave>Return to lobby</button>
+                    <button type="button" class="btn btn-ghost" id="returnHomeBtn">Return home</button>
                     <button type="button" class="btn btn-primary" id="againBtn" hidden>Play again</button>
                 </div>
             </div>
@@ -186,7 +269,10 @@
     </section>
 </div>
 
+<script src="glass-fold.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <script src="bluff.js"></script>
+<script src="bluff-entry.js"></script>
+<script src="bluff-lobby.js"></script>
 </body>
 </html>
