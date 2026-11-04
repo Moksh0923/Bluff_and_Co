@@ -1,88 +1,179 @@
-# Minimaliser — Card Game Scorekeeper
+# 🎮 Mini Game — A Multiplayer Gaming Platform
 
-A browser-based scorekeeping application for the Minimaliser card game, built with HTML, CSS, and JavaScript. Track players, record scores round by round, and view an automatically updated leaderboard.
+A collection of interactive browser-based games designed to bring friends together through competition, strategy, and fun.
 
-## Live Demo
+**Play. Compete. Outsmart. Repeat.**
 
-**[Play Minimaliser](https://moksh0923.github.io/Minimaliser-game/)**
+🌐 **Live Website:** [Play Mini Game](https://moksh0923.github.io/Minimaliser-game/)
 
-## Features
+📦 **Repository:** [Minimaliser-game](https://github.com/Moksh0923/Minimaliser-game)
 
-- **Dynamic Player Setup** — Choose the number of players and enter their names.
-- **Custom Rounds** — Set the number of rounds for each game.
-- **Score Tracking** — Enter scores for each player after every round.
-- **Live Leaderboard** — View cumulative scores and rankings after each round.
-- **Automatic Winner Calculation** — Identify the player with the lowest cumulative score.
-- **Simple Interface** — Play directly in your browser without installing an application.
+---
 
-## Built With
+## ✨ About the Project
 
-- **HTML5** — Page structure and input elements.
-- **CSS3** — Styling and layout.
-- **JavaScript** — Game logic, score calculations, and leaderboard updates.
+Mini Game is a multi-game web platform featuring interactive games with a focus on multiplayer experiences, engaging gameplay, and a polished user interface.
 
-## Getting Started
+Whether you're challenging friends to a strategic round of Bluff, keeping score in Minimaliser, or testing your moves in Tic Tac Toe, the platform brings multiple gaming experiences together in one place.
 
-### Run Locally
+The project combines frontend development, interactive JavaScript functionality, game logic, and responsive UI design.
 
-No additional software or dependencies are required to run the website.
+## 🕹️ Games
 
-1. Clone this repository:
+### 1. Bluff — The Art of Deception
 
-   ```bash
-   git clone https://github.com/Moksh0923/Minimaliser-game.git
-   ```
+The flagship game of the platform.
 
-2. Navigate to the project directory:
+A multiplayer card game where players use strategy, deception, and observation to outsmart their opponents.
 
-   ```bash
-   cd Minimaliser-game
-   ```
+**Features:**
+- Create and join multiplayer game rooms.
+- Host-based game management.
+- Interactive multiplayer lobby.
+- Dynamic card gameplay.
+- Player avatars and game table interface.
+- Card animations and visual feedback.
+- Competitive bluffing mechanics.
 
-3. Open `index.html` in your browser.
+### 2. Minimaliser — Keep Score, Stay Competitive
 
-Alternatively, open the project folder in an editor such as WebStorm and launch `index.html` in your browser.
+A scorekeeping game experience designed for groups.
 
-### How to Play
+**Features:**
+- Custom player setup.
+- Dynamic player and round management.
+- Score tracking across multiple rounds.
+- Live leaderboard.
+- Player rankings and performance tracking.
 
-1. Enter the number of players.
-2. Enter each player's name.
-3. Choose the number of rounds.
-4. Enter each player's score for the current round.
-5. Submit the round to update the cumulative scores and leaderboard.
-6. Continue until all rounds are complete.
-7. View the final leaderboard and winner.
+### 3. Tic Tac Toe — A Classic Challenge
 
-**Winning rule:** The player with the lowest cumulative score wins.
+A familiar strategy game with a modern interface.
 
-## Project Structure
+**Features:**
+- Interactive game board.
+- Player-versus-player gameplay.
+- Win and draw detection.
+- Dynamic game-state updates.
+- Restart and replay functionality.
+
+---
+
+## 🎨 Design & User Experience
+
+The platform follows a premium dark-purple and violet visual identity.
+
+- Modern dark-themed interface.
+- Glass-inspired UI elements.
+- Smooth transitions and animations.
+- Interactive game components.
+- Responsive layouts.
+- Consistent visual language across games.
+
+## 🛠️ Tech Stack
+
+| Technology | Purpose |
+|---|---|
+| HTML5 | Website structure |
+| CSS3 | Styling, layouts and animations |
+| JavaScript | Game logic and interactivity |
+| Git & GitHub | Version control |
+| GitHub Pages | Website deployment |
+| Netlify | Additional deployment |
+
+## 📂 Project Structure
 
 ```text
 Minimaliser-game/
-├── index.html    # Website structure
-├── style.css     # Styling and layout
-├── script.js     # Game logic and score tracking
-└── README.md     # Project documentation
+│
+├── index.html
+├── style.css
+├── home.css
+├── home.js
+│
+├── bluff.html
+├── bluff.css
+├── bluff.js
+├── bluff-entry.css
+├── bluff-entry.js
+├── bluff-lobby.css
+├── bluff-lobby.js
+├── glass-fold.js
+│
+├── minimaliser.html
+│
+├── tictactoe.html
+├── tictactoe.css
+│
+└── README.md
 ```
 
-## Future Improvements
+*Additional assets and supporting files may be present in the repository.*
 
-- Responsive design enhancements for mobile devices.
-- Improved score validation and error handling.
-- Enhanced leaderboard visuals and final results screen.
-- Game reset and replay functionality.
-- Improved accessibility and interaction feedback.
+## 🚀 Getting Started
 
-## Contributing
+Want to run the project locally?
 
-Suggestions and improvements are welcome. Feel free to fork the repository and submit a pull request.
+### 1. Clone the repository
 
-## Author
+```bash
+git clone https://github.com/Moksh0923/Minimaliser-game.git
+```
+
+### 2. Navigate to the project directory
+
+```bash
+cd Minimaliser-game
+```
+
+### 3. Run the website
+
+You can open `index.html` directly in your browser or start a local development server:
+
+```bash
+python3 -m http.server 8000
+```
+
+Visit:
+
+```text
+http://localhost:8000
+```
+
+No build process is required for the basic frontend setup.
+
+## 🌱 Development & Branching
+
+The project uses Git branches to manage development and redesigns.
+
+| Branch | Purpose |
+|---|---|
+| `main` | Stable website and production version |
+| `bluff_redesign` | Website redesign and feature development |
+
+Changes are developed and tested separately before being merged into the production branch.
+
+## 🔮 Future Possibilities
+
+- More multiplayer games.
+- Enhanced game animations and interactions.
+- Improved player profiles.
+- Expanded competitive features.
+- Better multiplayer experience and performance.
+- Additional game modes.
+
+## 👨‍💻 Author
 
 **Moksh Gola**
+
+AI-ML Student | Web Development & App Development Enthusiast
 
 - GitHub: [@Moksh0923](https://github.com/Moksh0923)
 
 ---
 
-Built as a hands-on project to practise frontend development with HTML, CSS, and JavaScript.
+<p align="center">
+  <b>Built with code, creativity, and a competitive spirit.</b>
+  <br/>
+  ⭐ If you enjoy the project, consider giving the repository a star!
+</p>
